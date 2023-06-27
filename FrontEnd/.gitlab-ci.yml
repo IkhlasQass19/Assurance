@@ -1,0 +1,29 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_USERNAME: $DOCKER_USERNAME
+  DOCKER_PASSWORD: $DOCKER_PASSWORD
+build:
+  stage: build
+  script:
+    - npm install --force
+    
+
+test:
+  stage: test
+  before_script:
+    - npm install --force
+  script:
+    - npm test
+
+deploy:
+  stage: deploy
+
+  script:
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    - docker build -t fron-assu:latest .
+    - docker tag fron-assu:latest zakibouarga/fron-assu:latest
+    - docker push zakibouarga/fron-assu:latest
